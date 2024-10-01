@@ -44,28 +44,49 @@
         <h1>Products</h1>
         <div >
         <?php
-            $stmt = $pdo->prepare("SELECT * FROM product");
-            $stmt->execute();
 
+          session_start();
+
+                          
             
-            
+          if (!isset($_SESSION['username'])) {
+              // หากยังไม่ได้ล็อกอิน, เปลี่ยนเส้นทางไปยังหน้า login
+              header("Location: ../cart/login-form.php"); // เปลี่ยนไปที่หน้าเข้าสู่ระบบของคุณ
+              exit();
+          }
+
+          $username = $_SESSION['username'];
+
+          // ตรวจสอบสิทธิ์ของผู้ใช้
+          $stmt = $pdo->prepare("SELECT type FROM member WHERE username = :username");
+          $stmt->execute(['username' => $username]);
+          $user = $stmt->fetch();
+
+          $stmt = $pdo->prepare("SELECT * FROM member");
+          $stmt->execute();
+
+          if($user['type'] == 'admin'){
 
             while ($row = $stmt->fetch()) {
-                echo "<div>";
-                echo "<img src='../pphoto/" . $row["pid"] . "' width=100> <br>" ;
-                echo "ชื่อ : " . $row ["pname"] . "<br>";
-                echo "รายละเอียด : " . $row ["pdetail"] . "<br>";
-                echo "ราคา : " . $row ["price"] . "<br>";
-                echo "<a href='edit_product2.php?pid=" . $row["pid"] . "'>แก้ไข</a> | ";
-                echo "<a href='#' onclick='confirmDelete(\"" . $row["pid"] . "\")'>ลบ</a>";
-                echo "</div>\n";
-                echo "<hr>\n";
+              echo "<div>";
+              echo "<img src='../pphoto/" . $row["pid"] . "' width=100> <br>" ;
+              echo "ชื่อ : " . $row ["pname"] . "<br>";
+              echo "รายละเอียด : " . $row ["pdetail"] . "<br>";
+              echo "ราคา : " . $row ["price"] . "<br>";
+              echo "<a href='edit_product2.php?pid=" . $row["pid"] . "'>แก้ไข</a> | ";
+              echo "<a href='#' onclick='confirmDelete(\"" . $row["pid"] . "\")'>ลบ</a>";
+              echo "</div>\n";
+              echo "<hr>\n";
 
-                
-                
+              
+              
 
-            }
-        ?>
+          }
+          }else{
+          echo "<h1>คุณไม่มีสิทธิ์เข้าถึงหน้านี้</h1>";
+          }
+          ?>
+       
             </div>
         
       </article>
@@ -78,8 +99,8 @@
           <li><a href="../cart/store.php">Buy Products</a></li>
           <li><a href="../cart/cart.php">Cart</a></li>
           <li><a href="../member_php/member.php">All Member</a></li>
-          <li><a href="../insert_product.html">Insert Products</a></li>
-          <li><a href="../insert_member.html">Insert Member</a></li>
+          <li><a href="../insert_product.php">Insert Products</a></li>
+          <li><a href="../insert_member.php">Insert Member</a></li>
           <li><a href="../member_php/edit_member.php">Delete/edit Member</a></li>
           <li><a href="./edit_product.php">Delete/edit product</a></li>
           <li><a href="../workshop/ws1.php">Workshop1</a></li>

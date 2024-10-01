@@ -1,4 +1,4 @@
-
+<?php include "connect.php" ?>
 
 <!doctype html>
 <html lang="en">
@@ -36,21 +36,50 @@
 
     <main>
       <article>
-        <h1>Insert Product</h1>
-    
+        <h1>Insert Member</h1>
 
+        <?php
 
-        <form action="/csshop/product_php/insert_product.php" method="post" enctype="multipart/form-data">
-            ชื่อสินค้า: <input type="text" name="pname" required><br>
-            รายละเอียดสินค้า: <br>
-            <textarea name="pdetail" rows="3" cols="40" required></textarea><br>
-            ราคา: <input type="number" name="price" required><br>
-            รูปภาพสินค้า: <input type="file" name="pimage" accept="image/*" required><br>
+          session_start();
+
+                          
             
-            <input type="submit" value="เพิ่มสินค้า">
-        </form>
+          if (!isset($_SESSION['username'])) {
+              // หากยังไม่ได้ล็อกอิน, เปลี่ยนเส้นทางไปยังหน้า login
+              header("Location: ./cart/login-form.php"); // เปลี่ยนไปที่หน้าเข้าสู่ระบบของคุณ
+              exit();
+          }
 
+          $username = $_SESSION['username'];
 
+          // ตรวจสอบสิทธิ์ของผู้ใช้
+          $stmt = $pdo->prepare("SELECT type FROM member WHERE username = :username");
+          $stmt->execute(['username' => $username]);
+          $user = $stmt->fetch();
+
+          $stmt = $pdo->prepare("SELECT * FROM member");
+          $stmt->execute();
+          ?>
+          <?php if($user['type'] == 'admin'):?>
+
+             <form action="/csshop/member_php/insert_member.php" method="post" enctype="multipart/form-data">
+            username:<input type="text" name="username"><br>
+            password:<input type="text" name="password"><br>
+            ชื่อ:<input type="text" name="name"><br>
+            ที่อยู่:<textarea name="address" row="3" cols="40"></textarea><br>
+            เบอร์โทรศัพท์:<input type="text" name="mobile"><br>
+            Email:<input type="text" name="email"><br>
+            รูปภาพ:<input type="file" name="photo" accept="image/*" required><br>
+            <input type="submit" value="เพิ่มสมาชิก">
+            </form>
+          <?php else:?>
+          
+            <h1>คุณไม่มีสิทธิ์เข้าถึงหน้านี้</h1>
+          
+
+          <?php endif;?>
+          
+       
       </article>
       <nav id="menu">
         <h2>Navigation</h2>
@@ -61,8 +90,8 @@
           <li><a href="./cart/store.php">Buy Products</a></li>
           <li><a href="./cart/cart.php">Cart</a></li>
           <li><a href="./member_php/member.php">All Member</a></li>
-          <li><a href="./insert_product.html">Insert Products</a></li>
-          <li><a href="./insert_member.html">Insert Member</a></li>
+          <li><a href="./insert_product.php">Insert Products</a></li>
+          <li><a href="./insert_member.php">Insert Member</a></li>
           <li><a href="./member_php/edit_member.php">Delete/edit Member</a></li>
           <li><a href="./product_php/edit_product.php">Delete/edit product</a></li>
           <li><a href="./workshop/ws1.php">Workshop1</a></li>

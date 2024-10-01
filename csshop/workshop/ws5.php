@@ -71,8 +71,8 @@
           <li><a href="../cart/store.php">Buy Products</a></li>
           <li><a href="../cart/cart.php">Cart</a></li>
           <li><a href="../member_php/member.php">All Member</a></li>
-          <li><a href="../insert_product.html">Insert Products</a></li>
-          <li><a href="../insert_member.html">Insert Member</a></li>
+          <li><a href="../insert_product.php">Insert Products</a></li>
+          <li><a href="../insert_member.php">Insert Member</a></li>
           <li><a href="../member_php/edit_member.php">Delete/edit Member</a></li>
           <li><a href="../product_php/edit_product.php">Delete/edit product</a></li>
           <li><a href="./ws1.php">Workshop1</a></li>

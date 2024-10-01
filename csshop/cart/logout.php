@@ -8,8 +8,8 @@
     );
 
 	session_destroy(); // ทำลาย session
+
+    header("Location: ../index.php");
 ?>
 
-ออกจากระบบสำเร็จแล้ว<br>
-หากต้องการเข้าสู่ระบบอีกครั้งโปรดคลิก
-<a href='login-form.php'>เข้าสู่ระบบ</a>
+

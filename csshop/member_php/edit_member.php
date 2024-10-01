@@ -44,25 +44,43 @@
         <h1>Members</h1>
         <div >
         <?php
+
+              session_start();
+
+                              
+                
+              if (!isset($_SESSION['username'])) {
+                  // หากยังไม่ได้ล็อกอิน, เปลี่ยนเส้นทางไปยังหน้า login
+                  header("Location: ../cart/login-form.php"); // เปลี่ยนไปที่หน้าเข้าสู่ระบบของคุณ
+                  exit();
+              }
+
+              $username = $_SESSION['username'];
+
+              // ตรวจสอบสิทธิ์ของผู้ใช้
+              $stmt = $pdo->prepare("SELECT type FROM member WHERE username = :username");
+              $stmt->execute(['username' => $username]);
+              $user = $stmt->fetch();
+
             $stmt = $pdo->prepare("SELECT * FROM member");
             $stmt->execute();
             
+            if($user['type'] == 'admin'){
 
-            while ($row = $stmt->fetch()) {
-                echo "<div>";
-                echo "<img src='../memphoto/" . $row["username"] . ".jpg' width=100> <br>" ;
-                echo "ชื่อสมาชิก : " . $row ["name"] . "<br>";
-                echo "ที่อยู่ : " . $row ["address"] . "<br>";
-                echo "เบอร์โทรศัพท์ : " . $row ["mobile"] . "<br>";
-                echo "อีเมล์ : " . $row ["email"] . "<br>";
-                echo "<a href='edit_member2.php?username=" . $row["username"] . "'>แก้ไข</a> | ";
-                echo "<a href='#' onclick='confirmDelete(\"" . $row["username"] . "\")'>ลบ</a>";
-                echo "</div>\n";
-                echo "<hr>\n";
-
-                
-                
-
+                while ($row = $stmt->fetch()) {
+                    echo "<div>";
+                    echo "<img src='../memphoto/" . $row["username"] . ".jpg' width=100> <br>" ;
+                    echo "ชื่อสมาชิก : " . $row ["name"] . "<br>";
+                    echo "ที่อยู่ : " . $row ["address"] . "<br>";
+                    echo "เบอร์โทรศัพท์ : " . $row ["mobile"] . "<br>";
+                    echo "อีเมล์ : " . $row ["email"] . "<br>";
+                    echo "<a href='edit_member2.php?username=" . $row["username"] . "'>แก้ไข</a> | ";
+                    echo "<a href='#' onclick='confirmDelete(\"" . $row["username"] . "\")'>ลบ</a>";
+                    echo "</div>\n";
+                    echo "<hr>\n";
+              }
+            }else{
+              echo "<h1>คุณไม่มีสิทธิ์เข้าถึงหน้านี้</h>";
             }
         ?>
             </div>
@@ -77,8 +95,8 @@
           <li><a href="../cart/store.php">Buy Products</a></li>
           <li><a href="../cart/cart.php">Cart</a></li>
           <li><a href="./member.php">All Member</a></li>
-          <li><a href="../insert_product.html">Insert Products</a></li>
-          <li><a href="../insert_member.html">Insert Member</a></li>
+          <li><a href="../insert_product.php">Insert Products</a></li>
+          <li><a href="../insert_member.php">Insert Member</a></li>
           <li><a href="./edit_member.php">Delete/edit Member</a></li>
           <li><a href="../product_php/edit_product.php">Delete/edit product</a></li>
           <li><a href="../workshop/ws1.php">Workshop1</a></li>

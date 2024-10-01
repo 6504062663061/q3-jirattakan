@@ -29,6 +29,10 @@
       .order {
         color: blue;
       }
+
+      .login {
+        color: aliceblue;
+      }
     </style>
   </head>
 
@@ -42,9 +46,20 @@
         <form>
           <input type="search" placeholder="Search the site...">
           <button>Search</button>
+
         </form>
         
       </div>
+      <?php 
+        if (!isset($_SESSION['username'])) {
+          
+          echo "<a class='login' href='./cart/login-form.php'>เข้าสู่ระบบ</a>";
+          
+        }else{
+          echo " ";
+        }
+      ?>
+      
     </header>
 
     <div class="mobile_bar">
@@ -62,12 +77,9 @@
 
             session_start();
 
-        // ตรวจสอบว่า ผู้ใช้ล็อกอินหรือไม่
-        if (!isset($_SESSION['username'])) {
-            // หากยังไม่ได้ล็อกอิน, เปลี่ยนเส้นทางไปยังหน้า login
-            header("Location: ./cart/login-form.php"); // เปลี่ยนไปที่หน้าเข้าสู่ระบบของคุณ
-          
-        }
+            
+        
+        
 
         // ดึงชื่อผู้ใช้ที่ล็อกอิน
         $username = $_SESSION['username'];
@@ -196,8 +208,15 @@
                     <?php endif; ?>
                 </table>
             <?php endif; ?>
-
-            <a class="logout" href="./cart/logout.php">ล็อกเอาท์</a>
+            <?php
+              // ตรวจสอบว่า ผู้ใช้ล็อกอินหรือไม่
+                if (isset($_SESSION['username'])) {
+                  // หากยังไม่ได้ล็อกอิน, เปลี่ยนเส้นทางไปยังหน้า login
+                  echo "<a class='logout' href='./cart/logout.php'>ล็อกเอาท์</a>";
+                
+              }
+            
+            ?>
           </div>   
       </article>
       <nav id="menu">
@@ -209,8 +228,8 @@
           <li><a href="./cart/store.php">Buy Products</a></li>
           <li><a href="./cart/cart.php">Cart</a></li>
           <li><a href="./member_php/member.php">All Member</a></li>
-          <li><a href="./insert_product.html">Insert Products</a></li>
-          <li><a href="./insert_member.html">Insert Member</a></li>
+          <li><a href="./insert_product.php">Insert Products</a></li>
+          <li><a href="./insert_member.php">Insert Member</a></li>
           <li><a href="./member_php/edit_member.php">Delete/edit Member</a></li>
           <li><a href="./product_php/edit_product.php">Delete/edit product</a></li>
           <li><a href="./workshop/ws1.php">Workshop1</a></li>
